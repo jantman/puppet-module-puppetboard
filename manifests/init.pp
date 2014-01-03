@@ -158,15 +158,30 @@ class puppetboard(
     ],
   }
 
+  $venvdir = "${basedir}/virtenv-puppetboard"
+
   # note that for the time being, this just installs dependencies.
-  python::virtualenv { "${basedir}/virtenv-puppetboard":
+  python::virtualenv { $venvdir:
     ensure       => present,
     user         => $user,
     group        => $group,
     packages     => ['Flask==0.10.1', 'Flask-WTF==0.8.4', 'Jinja2==2.7',
     		     'MarkupSafe==0.18', 'WTForms==1.0.4', 'Werkzeug==0.9.3',
-		     'itsdangerous==0.22', 'requests==1.2.3', 'pypuppetdb==0.0.4'],
+		     'itsdangerous==0.22', 'requests==1.2.3'],
     require      => Vcsrepo["${basedir}/puppetboard"],
+  }
+
+  exec {'install-pypuppetdb-master':
+    user      => $user,
+    command   => "${venvdir}/bin/pip install \
+                 --install-option='--prefix=${venvdir}' \
+                 --install-option='--install-lib=${venvdir}' \
+                 --install-option='--install-data=${venvdir}' \
+                 -e git+git://github.com/nedap/pypuppetdb.git#egg=pypuppetdb",
+    creates   => "${venvdir}/lib/python2.6/site-packages/pypuppetdb",
+    logoutput => on_failure,
+    cwd       => $venvdir,
+    require   => Python::Virtualenv[$venvdir],
   }
 
   if $listen == 'public' {
