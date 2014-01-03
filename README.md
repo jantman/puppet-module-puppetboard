@@ -1,7 +1,11 @@
 puppetboard
 ===========
 
-This is the puppetboard puppet module.
+This is a FORK of nibalizer's puppetboard pupper module
+(https://github.com/nibalizer/puppet-module-puppetboard).
+It is modified to use our internal (yet-to-be-released)
+python module, instead of stankevich/python that the original
+version uses.
 
 puppetboard is a puppet dashboard
 
