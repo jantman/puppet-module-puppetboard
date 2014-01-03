@@ -174,9 +174,6 @@ class puppetboard(
   exec {'install-pypuppetdb-master':
     user      => $user,
     command   => "${venvdir}/bin/pip install \
-                 --install-option='--prefix=${venvdir}' \
-                 --install-option='--install-lib=${venvdir}' \
-                 --install-option='--install-data=${venvdir}' \
                  -e git+git://github.com/nedap/pypuppetdb.git#egg=pypuppetdb",
     creates   => "${venvdir}/lib/python2.6/site-packages/pypuppetdb",
     logoutput => on_failure,
